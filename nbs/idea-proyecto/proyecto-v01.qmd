@@ -1,5 +1,5 @@
 ---
-title: "Modelo Básico Proyecto"
+title: "Modelo Optimizado Proyecto"
 format: html
 ---
 
@@ -14,12 +14,17 @@ format: html
 (function() {
   const sketch = (p) => {
     let video;
-    let classifier;
-    const modelLoaded = 'https://teachablemachine.withgoogle.com/models/iRKXr61T1/';
-    let label = 'esperando...';
+    let classifierCasco, classifierChaleco;
+    const modelCascoURL = 'https://teachablemachine.withgoogle.com/models/tQJQTMHsy/'; // URL del modelo de casco
+    const modelChalecoURL = 'https://teachablemachine.withgoogle.com/models/cbGSYXeUl/'; // URL del modelo de chaleco
+    let casco = false;
+    let chaleco = false;
+    let confianzaCasco = 0;
+    let confianzaChaleco = 0;
 
     p.preload = function() {
-      classifier = ml5.imageClassifier(modelLoaded);
+      classifierCasco = ml5.imageClassifier(modelCascoURL); // Cargar el modelo de casco
+      classifierChaleco = ml5.imageClassifier(modelChalecoURL); // Cargar el modelo de chaleco
     }
 
     p.setup = function() {
@@ -27,58 +32,58 @@ format: html
       video = p.createCapture(p.VIDEO);
       video.size(640, 480);
       video.hide();
-      classifyVideo();
+      classifyVideo(); // Iniciar la clasificación en video
     }
 
     function classifyVideo() {
-      classifier.classify(video, gotResults);
-    }
+      // Clasificación para casco
+      classifierCasco.classify(video, (error, results) => {
+        if (error) {
+          console.error(error);
+          return;
+        }
+        // Actualizar confianza para casco
+        confianzaCasco = results[0].confidence;
+        casco = results[0].label === 'casco' && confianzaCasco >= 0.99; // Verificar si el casco está presente con 99% de confianza
+      });
 
-    function gotResults(error, results) {
-      if (error) {
-        console.error(error);
-        return;
-      }
+      // Clasificación para chaleco
+      classifierChaleco.classify(video, (error, results) => {
+        if (error) {
+          console.error(error);
+          return;
+        }
+        // Actualizar confianza para chaleco
+        confianzaChaleco = results[0].confidence;
+        chaleco = results[0].label === 'chaleco' && confianzaChaleco >= 0.99; // Verificar si el chaleco está presente con 99% de confianza
+      });
 
-      label = results[0].label;
-      classifyVideo();
+      setTimeout(classifyVideo, 100); // Volver a clasificar cada 100 ms
     }
 
     p.draw = function() {
       p.background(200);
+      p.image(video, 0, 0); // Dibujar la cámara
 
-      // Aplicar tint a la cámara según la condición
-      if (label === 'con_chaleco') {
-        p.tint(0, 255, 0, 127); // Verde traslúcido
-      } else if (label === 'sin_chaleco') {
-        p.tint(255, 0, 0, 127); // Rojo traslúcido
-      } else {
-        p.noTint(); // Sin tint para el caso 'vacio'
-      }
-
-      // Dibujar la cámara
-      p.image(video, 0, 0);
-
-      // Configurar el área para la información y el emoji en la parte inferior
+      // Configuración para la información en la parte inferior
       p.fill(255);
-      p.rect(0, 480, 640, 160); // Fondo del cuadrado en la parte inferior
+      p.rect(0, 480, 640, 160); // Fondo donde mostrar el mensaje
 
       p.fill(0);
-      p.textSize(30);
+      p.textSize(20);
       p.textAlign(p.CENTER, p.CENTER);
 
-      if (label === 'con_chaleco') {
-        p.text("Estás cumpliendo las normas", p.width / 2, 540);
-        p.textSize(50);
-        p.text("🙂", p.width / 2, 600);
-      } else if (label === 'sin_chaleco') {
-        p.text("¡Debes estar con chaleco!", p.width / 2, 540);
-        p.textSize(50);
-        p.text("😠", p.width / 2, 600);
+      // Mostrar mensajes de acuerdo a los resultados de clasificación
+      if (casco && chaleco) {
+        p.text("Estás cumpliendo con casco y chaleco", p.width / 2, 520);
+      } else if (casco && !chaleco) {
+        p.text("¡Falta el chaleco!", p.width / 2, 520);
+      } else if (!casco && chaleco) {
+        p.text("¡Falta el casco!", p.width / 2, 520);
       } else {
-        p.textSize(30);
-        p.text(label, p.width / 2, 540);
+        p.text("¡Necesitas casco y chaleco!", p.width / 2, 520);
       }
+
     }
   };
 

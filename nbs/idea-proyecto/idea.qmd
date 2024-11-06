@@ -1,7 +1,8 @@
 ---
-title: "Idea Proyecto Datos"
+title: "Idea Optimizada Proyecto Datos"
 format: html
 ---
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/p5.play/lib/p5.play.min.js"></script>
 <script src="https://unpkg.com/ml5@0.12.2/dist/ml5.min.js"></script>
@@ -10,12 +11,30 @@ format: html
 
 ### Idea para un Modelo de Clasificación de Imágenes para la Seguridad en el Trabajo
 
-- **`Problema:`**En el sector de la construcción y en otros trabajos de alto riesgo, la seguridad de los trabajadores es primordial. Uno de los principales problemas es garantizar que todos los trabajadores cumplan con las normas de seguridad, como el uso de chalecos reflectantes y cascos de protección. Sin embargo, en entornos dinámicos y con gran cantidad de personal, supervisar de manera efectiva el cumplimiento de estas normativas puede ser un reto. La falta de cumplimiento puede resultar en accidentes graves, exponiendo a los trabajadores a peligros innecesarios.
-- **`Solución:`**Proponemos desarrollar un modelo de clasificación de imágenes entrenado para identificar automáticamente el uso correcto de equipo de protección personal (EPP) en sitios de construcción y otros ambientes laborales de alto riesgo. Este modelo, basado en tecnologías de visión por computadora, utilizará imágenes captadas por cámaras instaladas en el lugar de trabajo para detectar si los trabajadores están usando chalecos reflectantes y cascos de protección.
-El modelo evaluará imágenes en tiempo real, clasificando a las personas en función de su conformidad con las normas de seguridad (por ejemplo, usando un chaleco reflectante y un casco) y generando alertas en caso de incumplimiento. Esto permitirá a los supervisores actuar de manera inmediata, reduciendo la probabilidad de accidentes y mejorando la seguridad en el lugar de trabajo.
+- **`Problema:`**  
+En el sector de la construcción y otros trabajos de alto riesgo, garantizar la seguridad de los trabajadores es esencial. Un desafío común es supervisar el cumplimiento de las normativas de seguridad, como el uso de chalecos reflectantes y cascos de protección. En ambientes dinámicos con numerosos trabajadores, realizar una supervisión efectiva puede ser complicado. La falta de cumplimiento con estas normativas de seguridad puede resultar en accidentes graves, exponiendo a los trabajadores a riesgos innecesarios y comprometiendo su integridad física.
 
-## Ventajas.
+- **`Solución:`**  
+Para abordar este desafío, se propone desarrollar un modelo de clasificación de imágenes entrenado específicamente para identificar el uso adecuado de equipo de protección personal (EPP) en entornos de alto riesgo, como sitios de construcción. Este modelo, basado en tecnologías avanzadas de visión por computadora, empleará cámaras instaladas en el lugar de trabajo para analizar en tiempo real las imágenes de los trabajadores y determinar si están utilizando correctamente chalecos reflectantes y cascos de protección.
 
-- **`Automatización:`**Reducción de la necesidad de supervisión manual constante.
-- **`Eficiencia:`**Detección rápida y precisa del incumplimiento de normas de seguridad.
-- **`Prevención:`**Mejora de la prevención de riesgos mediante el monitoreo continuo y la generación de alertas.
+El modelo utilizará dos modelos de **Teachable Machine** distintos para la clasificación de las imágenes (+3.000 imágenes en modelo 1, +6.000 imágenes en modelo 2):  
+1. Un modelo entrenado para detectar **chalecos reflectantes** (Modelo 1).  
+2. Un modelo entrenado para detectar **cascos de protección** (Modelo 2).  
+
+
+Cada uno de estos modelos se especializa en una clase específica. El sistema evalúa en tiempo real las imágenes, y si un trabajador está usando los EPP adecuados (chaleco y casco), el modelo proporciona una señal positiva. En caso de que falte alguno de los EPP, el sistema genera una alerta en tiempo real. De esta forma, los supervisores pueden tomar medidas inmediatas para corregir cualquier incumplimiento de las normativas de seguridad.
+
+- **`Funcionalidad inteligente:`**  
+El sistema incorpora una **funcionalidad inteligente** basada en los modelos de Teachable Machine, los cuales permiten la clasificación precisa de imágenes con un alto grado de confianza. Estos modelos están configurados para identificar específicamente las clases **"chaleco"** y **"casco"** con una confiabilidad superior al 99%, asegurando que los trabajadores estén correctamente protegidos. En caso de que un trabajador no esté usando alguno de los EPP, el sistema notifica a los supervisores para que se tomen acciones correctivas.
+
+## Ventajas
+
+- **`Automatización:`** Reducción de la necesidad de supervisión manual constante, mejorando la eficiencia en el monitoreo de seguridad.
+- **`Eficiencia:`** Detección rápida y precisa del incumplimiento de normas de seguridad, gracias a los modelos de Teachable Machine.
+- **`Prevención:`** Mejora de la prevención de riesgos mediante el monitoreo continuo y la generación de alertas instantáneas cuando se detecta un incumplimiento.
+
+### PRUEBAS
+
+<img src="./resources/modelo11.png" alt="Settings button" title="Settings button" width="500" />
+<img src="./resources/modelo111.png" alt="Settings button" title="Settings button" width="1000" />
+<img src="./resources/modelo1.png" alt="Settings button" title="Settings button" width="1000" />
